@@ -1,0 +1,117 @@
+<div class="auth-page">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>Регистрация</h1>
+                <p class="auth-subtitle">Создайте аккаунт для начала работы</p>
+            </div>
+
+            @if (errorMessage) {
+                <p class="error-msg error-banner">{{ errorMessage }}</p>
+            }
+
+            <form [formGroup]="form" (ngSubmit)="onSubmit()" class="auth-form">
+                <div class="form-group">
+                    <label for="">Имя</label>
+                    <input 
+                        id="name"
+                        type="text"
+                        formControlName="name"
+                        placeholder="Ваше имя"
+                        [class.invalid]="submitted && f['name']?.errors"
+                    >
+
+                    @if (submitted && f['name']?.errors) {
+                        <span class="error-message">
+                            @if (f['name']?.errors?.['required']) {
+                                Введите имя
+                            } @else if (f['name']?.errors?.['minlength']) {
+                                Имя должно быть не менее 2 символов
+                            }
+                        </span>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input 
+                        id="email"
+                        type="email"
+                        formControlName="email"
+                        placeholder="example@mail.com"
+                        [class.invalid]="submitted && f['email']?.errors"
+                    >
+
+                    @if (submitted && f['email']?.errors) {
+                        <span class="error-message">
+                            @if (f['email']?.errors?.['required']) {
+                                Введите email
+                            } @else if (f['email']?.errors?.['email']) {
+                                Неверный формат email
+                            }
+                        </span>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Пароль</label>
+                    <div class="input-with-icon">
+                        <input 
+                            id="password"
+                            [type]="showPassword ? 'text' : 'password'"
+                            formControlName="password"
+                            placeholder="••••••••"
+                            [class.invalid]="submitted && f['password']?.errors"
+                        >
+                        <button type="button"
+                            class="icon-btn"
+                            (click)="togglePassword()"
+                            title="Показать пароль">
+                            {{ showPassword ? '🙈' : '👁️' }}
+                        </button>
+
+                        @if (submitted && f['password']?.errors) {
+                            <span class="error-message">
+                                @if (f['password']?.errors?.['required']) {
+                                    Введите пароль
+                                } @else if (f['password']?.errors?.['minlength']) {
+                                    Минимум 6 символов
+                                }
+                            </span>
+                        }
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">Подтвердите пароль</label>
+                        <input
+                            id="confirmPassword"
+                            type="password"
+                            formControlName="confirmPassword"
+                            placeholder="••••••••"
+                            [class.invalid]="submitted && (f['confirmPassword']?.errors || form.errors?.['mismatch'])"
+                        >
+                        @if (submitted && (f['confirmPassword']?.errors || form.errors?.['mismatch'])) {
+                            <span class="error-message">
+                                {{form.errors?.['mismatch'] ? 'Пароли не совпадают' : 'Подтвердите пароль'}}
+                            </span>
+                        }
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary" [disabled]="submitting">
+                    {{submitting ? 'Отправка...' : 'Зарегистрироваться'}}
+                </button>
+            </form>
+
+            <p class="auth-footer">
+                Уже есть аккаунт? 
+                <a>Войти</a>
+            </p>
+        </div>
+
+        <div class="auth-decoration">
+            <div class="blob"></div>
+            <div class="blob blob-2"></div>
+        </div>
+    </div>
+</div>
